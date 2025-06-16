@@ -1,0 +1,6 @@
+@CrudDapperVideo_HostAddress = http://localhost:5101
+
+GET {{CrudDapperVideo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
