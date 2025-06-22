@@ -15,6 +15,16 @@ namespace CrudDapperVideo
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("UsuariosApp", policy =>
+                {
+                    policy.AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,10 +34,11 @@ namespace CrudDapperVideo
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("UsuariosApp");
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
