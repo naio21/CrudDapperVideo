@@ -47,5 +47,27 @@ namespace CrudDapperVideo.Controllers
             }
             return Ok(usuario);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> EditarUsuario(UsuarioEditarDto usuario)
+        {
+            var resultado = await _usuarioInterface.EditarUsuario(usuario);
+            if (resultado.Status == false)
+            {
+                return BadRequest(resultado);
+            }
+            return Ok(resultado);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoverUsuarioPorId(int id)
+        {
+            var resultado = await _usuarioInterface.RemoverUsuarioPorId(id);
+            if (resultado.Status == false)
+            {
+                return NotFound(resultado);
+            }
+            return Ok(resultado);
+        }
     }
 }

@@ -85,15 +85,7 @@ namespace CrudDapperVideo.Services
                                         CPF = @CPF,
                                         Situacao = @Situacao
                                     WHERE Id = @Id", 
-                                    new { 
-                                            Id = usuario.Id, 
-                                            NomeCompleto = usuario.NomeCompleto,
-                                            Email = usuario.Email,
-                                            Cargo = usuario.Cargo,
-                                            Salario = usuario.Salario,
-                                            CPF = usuario.CPF,
-                                            Situacao = usuario.Situacao
-                                    }
+                                    usuario
                                 );
             await Desconectar();
             if (linhasAfetadas == 0)
@@ -104,6 +96,26 @@ namespace CrudDapperVideo.Services
             }
             response.Dados = await BuscarUsuarios().ContinueWith(t => t.Result.Dados);
             response.Mensagem = "Usuário alterado com sucesso.";
+            return response;
+        }
+
+        public async Task<ResponseModel<List<UsuarioListarDto>>> RemoverUsuarioPorId(int id)
+        {
+            ResponseModel<List<UsuarioListarDto>> response = new();
+            await Conectar();
+            int linhasAfetadas = await _sqlConn.ExecuteAsync(
+                                            "DELETE FROM Usuarios WHERE Id = @Id", 
+                                            new { Id = id }
+                                        );
+            await Desconectar();
+            if (linhasAfetadas == 0)
+            {
+                response.Status = false;
+                response.Mensagem = "Erro ao excluir o usuário.";
+                return response;
+            }
+            response.Dados = await BuscarUsuarios().ContinueWith(t => t.Result.Dados);
+            response.Mensagem = "Usuário excluído com sucesso.";
             return response;
         }
 
